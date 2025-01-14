@@ -7,7 +7,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Clear user data from localStorage
-    // localStorage.removeItem('user');
+    localStorage.removeItem('user');
+    //setUser(null);
     // Redirect to the Login page
     navigate('/login');
   };
@@ -23,6 +24,11 @@ const Navbar = () => {
           <ul className="navbar-nav ms-auto">
             {user ? (
               <>
+                <li className="nav-item">
+                  <span className="navbar-text me-3">
+                    Hello, {user.username} {/* Display the logged-in user's name */}
+                  </span>
+                </li>
                 <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={handleLogout}>
                     Logout

@@ -11,7 +11,7 @@ const Login = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       // Redirect to the dashboard if the user is logged in
-      // navigate('/dashboard');
+      navigate('/dashboard');
     }
   }, [navigate]);
 
