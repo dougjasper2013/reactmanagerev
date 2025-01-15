@@ -1,39 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ContactForm from '../components/ContactForm'; // Import ContactForm component
-import ContactList from '../components/ContactList'; // Import ContactList component
+// src/pages/Dashboard.js
+import React, { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // To get auth state
+import { useNavigate } from 'react-router-dom'; // For navigation
+import ContactForm from '../components/ContactForm'; // Import the ContactForm component
+import ContactList from '../components/ContactList'; // Import the ContactList component
 
-const Dashboard = () => {
-  const [contacts, setContacts] = useState([]);
-  const navigate = useNavigate();
+function Dashboard() {
+  const { isAuthenticated } = useAuth(); // Get auth state from context
+  const navigate = useNavigate(); // Get navigate function from react-router-dom
 
-  // Check if the user is logged in when component mounts
+  // Redirect to login if the user is not authenticated
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      navigate('/login');
-    } else {
-      // Load contacts from localStorage if available
-      const savedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
-      setContacts(savedContacts);
+    if (!isAuthenticated) {
+      navigate('/');
     }
-  }, [navigate]);
+  }, [isAuthenticated, navigate]);
 
-  const addContact = (contact) => {
-    const updatedContacts = [...contacts, contact];
-    setContacts(updatedContacts);
-    localStorage.setItem('contacts', JSON.stringify(updatedContacts)); // Save to localStorage
-  };
+  if (!isAuthenticated) {
+    return null; // We redirect immediately if not authenticated
+  }
 
   return (
     <div className="container mt-5">
-      <h2>Welcome to the Dashboard</h2>
-      <p>Manage your contacts here.</p>
+      <h2>Welcome to Your Dashboard!</h2>
+      <p>Manage your contacts below:</p>
       
-      <ContactForm onAddContact={addContact} />
-      <ContactList contacts={contacts} />
+      <ContactForm /> {/* Render ContactForm */}
+      <ContactList /> {/* Render ContactList */}
     </div>
   );
-};
+}
 
 export default Dashboard;

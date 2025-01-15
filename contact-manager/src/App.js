@@ -1,24 +1,26 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import './App.css';
+import { AuthProvider } from './context/AuthContext'; // Auth context to wrap the app with
+import Navbar from './components/Navbar'; // Import Navbar
+import Dashboard from './pages/Dashboard'; // Import Dashboard page
+import Login from './pages/Login'; // Import Login page
+import Register from './pages/Register'; // Import Register page
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <div className="container">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<Login />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar /> {/* Always render Navbar at the top */}
+        <div className="container mt-5">
+          <Routes>
+            <Route path="/" element={<Login />} /> {/* Login page */}
+            <Route path="/register" element={<Register />} /> {/* Register page */}
+            <Route path="/dashboard" element={<Dashboard />} /> {/* Dashboard page */}
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

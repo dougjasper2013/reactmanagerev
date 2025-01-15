@@ -1,55 +1,50 @@
+// src/components/ContactForm.js
 import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom'; // For programmatic navigation
 
-const ContactForm = ({ onAddContact }) => {
+function ContactForm() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
+  // Save contact data to localStorage
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name && email) {
-      const newContact = { name, email };
-      onAddContact(newContact);  // Pass new contact to the parent (Dashboard)
-      setName('');
-      setEmail('');
-    }
+    const newContact = { name, phone };
+    const storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    storedContacts.push(newContact);
+    localStorage.setItem('contacts', JSON.stringify(storedContacts));
+    setName(''); // Clear the form
+    setPhone('');
   };
 
   return (
-    <div className="card mb-4">
-      <div className="card-header">
-        <h5>Add New Contact</h5>
-      </div>
-      <div className="card-body">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              className="form-control" 
-              placeholder="Enter name" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              className="form-control" 
-              placeholder="Enter email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary w-100">Add Contact</button>
-        </form>
-      </div>
+    <div className="card p-4 mb-4">
+      <h3>Add New Contact</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="form-label">Name</label>
+          <input
+            type="text"
+            className="form-control"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Phone</label>
+          <input
+            type="text"
+            className="form-control"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+        </div>
+        <button className="btn btn-primary" type="submit">Add Contact</button>
+      </form>
     </div>
   );
-};
+}
 
 export default ContactForm;

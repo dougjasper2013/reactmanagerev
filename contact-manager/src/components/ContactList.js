@@ -1,30 +1,31 @@
-import React from 'react';
+// src/components/ContactList.js
+import React, { useEffect, useState } from 'react';
 
-const ContactList = ({ contacts }) => {
+function ContactList() {
+  const [contacts, setContacts] = useState([]);
+
+  // Load contacts from localStorage on mount
+  useEffect(() => {
+    const storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    setContacts(storedContacts);
+  }, []);
+
   return (
-    <div className="card">
-      <div className="card-header">
-        <h5>Contacts</h5>
-      </div>
-      <div className="card-body">
-        {contacts.length === 0 ? (
-          <p className="text-center">No contacts available</p>
-        ) : (
-          <ul className="list-group">
-            {contacts.map((contact, index) => (
-              <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                  <strong>{contact.name}</strong>
-                  <p className="mb-0">{contact.email}</p>
-                </div>
-                <button className="btn btn-sm btn-danger">Delete</button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <div className="card p-4">
+      <h3>Contact List</h3>
+      {contacts.length > 0 ? (
+        <ul className="list-group">
+          {contacts.map((contact, index) => (
+            <li key={index} className="list-group-item">
+              <strong>{contact.name}</strong>: {contact.phone}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No contacts added yet.</p>
+      )}
     </div>
   );
-};
+}
 
 export default ContactList;

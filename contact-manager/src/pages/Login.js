@@ -1,67 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/pages/Login.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // For programmatic navigation
+import { useAuth } from '../context/AuthContext'; // To use the login method
 
-const Login = () => {
+
+function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get login method from context
 
-  useEffect(() => {
-    // Check if the user is already logged in
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      // Redirect to the dashboard if the user is logged in
-      navigate('/dashboard');
-    }
-  }, [navigate]);
+  const handleLogin = () => {
+    const user = JSON.parse(localStorage.getItem(username)); // Retrieve user from localStorage
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    if (user && user.username === username && user.password === password) {
-      navigate('/dashboard');
+    if (user && user.password === password) {
+      login(user); // Set user as authenticated in context
+      navigate('/dashboard'); // Redirect to dashboard
     } else {
       alert('Invalid username or password');
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card">
-            <div className="card-header text-center">
-              <h3>Login</h3>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
+    <div>      
+      <div className="container mt-5">
+        <h2 className="mb-4">Login</h2>
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <div className="card p-4">
+              <div className="card-body">
                 <div className="mb-3">
-                  <label htmlFor="username" className="form-label">Username</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    id="username" 
-                    placeholder="Enter username" 
-                    value={username} 
-                    onChange={(e) => setUsername(e.target.value)} 
-                    required 
+                  <label className="form-label">Username</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    id="password" 
-                    placeholder="Enter password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">Login</button>
-              </form>
+                <button className="btn btn-primary w-100" onClick={handleLogin}>
+                  Login
+                </button>
+              </div>
             </div>
           </div>
         </div>
